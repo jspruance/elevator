@@ -10,6 +10,7 @@ class ElevatorController {
     }
 
     // Requirement #7: Elevator requests - assign request to appropriate elevator
+    // TO DO: check if elevator is in 'MAINTENANCE' mode before assigning request
     callElevator(curFloor, direction) {
       let assignedElevator;
       // iterate through elevators, filter by unoccupied, sort to find closest
@@ -30,8 +31,16 @@ class ElevatorController {
       });
 
       if(!assignedElevator) {
-        // is occupied elevator en route by that floor?
-        // logic
+        // will occupied elevator pass floor en route to destination?
+        let occupiedElevators = this.elevators.filter((elevator) => {
+            let occ = elevator.getOccupied();
+            return occ == true;
+        });
+        this.occupiedElevators.map((elevator) => {
+          // STUB: determine if elevator will pass requested floor
+          // need to expose more status info from Elevator class
+          assignedElevator = elevators;
+        });
       }else {
           // assign request to closes unoccupied elevator
           assignedElevator = candidateElevators[0];
@@ -50,6 +59,15 @@ class Elevator {
         this.floorsTraveled = 0;
         this.totalFloors = floors;
         this.occupied = false;
+        this.status = 'ACTIVE';
+    }
+
+    setStatus(status) {
+        this.status = status;
+    }
+
+    getStatus() {
+        return this.status;
     }
 
     setCurFloor(curFloor) {
@@ -105,8 +123,13 @@ class Elevator {
               if(currentFloor == destFloor) {
                   // Requirement #3: Report when doors open / close
                   logger.info(`Arrived at floor ${destFloor} - doors opening`);
-                  this.incrementTrips();
                   logger.info(`Doors closing`);
+                  this.incrementTrips();
+                  // Requirement #8: If 100 trips - take out of service
+                  let curStatus = getStatus();
+                  if(curStatus >= 100) {
+                      setStatus('MAINTENANCE');
+                  }
                   break;
               }
               // Requirement #4: Elevator cannot proceed above top floor
