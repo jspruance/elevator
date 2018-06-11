@@ -1,0 +1,22 @@
+{
+  "name": "elevator",
+  "version": "1.0.0",
+  "description": "An elevator programmed in Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jspruance/elevator.git"
+  },
+  "author": "Jonathan Spruance",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jspruance/elevator/issues"
+  },
+  "homepage": "https://github.com/jspruance/elevator#readme",
+  "dependencies": {
+    "winston": "^2.4.2"
+  }
+}
