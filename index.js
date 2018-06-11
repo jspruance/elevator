@@ -11,6 +11,7 @@ class ElevatorController {
 
     // Requirement #7: Elevator requests - assign request to appropriate elevator
     callElevator(curFloor, direction) {
+      let assignedElevator;
       // iterate through elevators, filter by unoccupied, sort to find closest
       let candidateElevators = this.elevators.filter((elevator) => {
         let occ = elevator.getOccupied();
@@ -20,7 +21,24 @@ class ElevatorController {
         return a.getCurFloor() - b.getCurFloor();
       });
 
-      this.elevators[0].goToFloor(curFloor, direction);
+      // is unoccupied elevator already stopped at that floor?
+      candidateElevators.map((elevator) => {
+        if(elevator.getCurFloor() == curFloor) {
+          assignedElevator = elevator;
+          // TO DO: further refine to choose closest if multiple elevators currently at floor
+        }
+      });
+
+      if(!assignedElevator) {
+        // is occupied elevator en route by that floor?
+        // logic
+      }else {
+          // assign request to closes unoccupied elevator
+          assignedElevator = candidateElevators[0];
+      }
+
+      // finally send request to selected elevator
+      assignedElevator.goToFloor(curFloor, direction);
     }
 }
 
