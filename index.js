@@ -9,9 +9,17 @@ class ElevatorController {
         }
     }
 
+    // Requirement #7: Elevator requests - assign request to appropriate elevator
     callElevator(curFloor, direction) {
-      // request always assigned to first elevator (for now)
-      // TO DO: add elevator request assignment logic
+      // iterate through elevators, filter by unoccupied, sort to find closest
+      let candidateElevators = this.elevators.filter((elevator) => {
+        let occ = elevator.getOccupied();
+        return occ == false;
+      });
+      candidateElevators.sort(function (a, b) {
+        return a.getCurFloor() - b.getCurFloor();
+      });
+
       this.elevators[0].goToFloor(curFloor, direction);
     }
 }
@@ -23,6 +31,7 @@ class Elevator {
         this.trips = 0;
         this.floorsTraveled = 0;
         this.totalFloors = floors;
+        this.occupied = false;
     }
 
     setCurFloor(curFloor) {
@@ -31,6 +40,14 @@ class Elevator {
 
     getCurFloor() {
       return this.curFloor;
+    }
+
+    setOccupied(occupied) {
+        this.occupied = occupied;
+      }
+  
+    getOccupied() {
+        return this.occupied;
     }
 
     incrementTrips() {
@@ -48,10 +65,12 @@ class Elevator {
 
     // Requirement #6: Request can be made to go to any floor from any floor
     elevatorRequest(destFloor) {
-        // logic
+        setOccupied(true);
         const curFloor = this.getCurFloor();
         const direction = (destFloor > curFloor) ? 'up' : 'down';
         goToFloor(curFloor, destFloor, direction);
+        // TO DO: promisify goToFloor so that timing of setOccupied(false) is accurate
+        setOccupied(false);
     }
 
     goToFloor(curFloor, destFloor, direction) {
@@ -78,7 +97,7 @@ class Elevator {
               }
           }
         }else {
-          // 'Down' logic 
+          // 'Down' logic - similar to 'up'. Some code can likely be factored out.
           // Requirement #5: Elevator cannot proceed below bottom floor
           // check for bottom floor
         }
